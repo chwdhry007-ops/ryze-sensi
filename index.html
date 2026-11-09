@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ryze Sensi</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#09090b;--s:#141418;--s2:#1c1c22;--fg:#f4f4f5;--m:#a1a1aa;--f:#71717a;--p:#e11d2e;--pi:#fff1f2;--b:#2a2a32}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font-family:Outfit,system-ui,sans-serif}
+main{max-width:960px;margin:0 auto;padding:32px 16px}h1{font-size:44px;margin:8px 0}
+.sub{color:var(--m)}.kicker{color:var(--p);letter-spacing:.22em;font-size:12px;font-weight:700}
+.grid{display:grid;gap:16px;margin-top:24px}@media(min-width:900px){.grid{grid-template-columns:28rem 1fr}}
+.card{background:var(--s);border:1px solid var(--b);border-radius:16px;padding:16px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}button,select,input{font:inherit;color:inherit}
+.plat{height:48px;border-radius:12px;border:1px solid var(--b);background:var(--s2);font-weight:800;cursor:pointer}
+.plat.on{background:var(--p);color:var(--pi);border-color:var(--p)}
+label{display:block;margin-top:14px;font-size:12px;color:var(--f);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+input[type=text],select{width:100%;height:48px;margin-top:8px;border-radius:12px;border:1px solid var(--b);background:#09090b;padding:0 12px}
+.dpi{margin-top:14px;background:var(--s2);border:1px solid var(--b);border-radius:12px;padding:14px}
+.dpihead{display:flex;justify-content:space-between}.badge{background:var(--p);color:var(--pi);border-radius:6px;padding:4px 8px;font-weight:700}
+input[type=range]{width:100%;margin-top:12px;accent-color:var(--p)}
+.toggle{width:100%;margin-top:8px;min-height:56px;text-align:left;background:#09090b;border:1px solid var(--b);border-radius:12px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.box{width:24px;height:24px;border-radius:6px;border:1px solid var(--b)}.toggle.on .box{background:var(--p);border-color:var(--p)}
+.go{width:100%;height:56px;margin-top:16px;border:0;border-radius:16px;background:var(--p);color:var(--pi);font-weight:800;cursor:pointer}
+.note{text-align:center;color:var(--f);font-size:12px}.stat{background:var(--s2);border-radius:12px;padding:10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+ul{margin:12px 0;padding:0;border:1px solid var(--b);border-radius:12px;overflow:hidden}li{list-style:none}
+li.rowi{display:flex;justify-content:space-between;padding:10px 12px;background:#09090b;border-top:1px solid var(--b)}li.rowi:first-child{border-top:0}
+.num{font-size:20px;font-weight:700}.copy{height:40px;border-radius:10px;border:1px solid var(--b);background:transparent;color:var(--m);cursor:pointer}
+.empty{min-height:240px;display:grid;place-items:center;text-align:center;color:var(--m)}
+</style></head><body><main>
+<p class="kicker">DPI + SENSITIVITY</p><h1>Ryze Sensi</h1>
+<p class="sub">Phone, RAM, storage aur DPI se Free Fire config. Koi unlock nahi.</p>
+<div class="grid"><section class="card">
+<div class="row"><button class="plat on" id="and" type="button">ANDROID</button><button class="plat" id="ios" type="button">IOS</button></div>
+<label>Device model (optional)<input id="model" type="text" placeholder="Ex: Redmi Note 10"/></label>
+<div class="row"><label>RAM<select id="ram"><option>2</option><option>3</option><option selected>4</option><option>6</option><option>8</option><option>12</option></select></label>
+<label>Storage<select id="storage"><option>32</option><option>64</option><option selected>128</option><option>256</option><option>512</option></select></label></div>
+<div class="dpi"><div class="dpihead"><span>Custom DPI</span><span class="badge" id="dpiv">411</span></div><input id="dpi" type="range" min="200" max="640" value="411"/></div>
+<label>Play style</label>
+<button class="toggle" type="button" data-k="fps"><span><b>120+ FPS</b><br><small>Tighter control</small></span><span class="box"></span></button>
+<button class="toggle" type="button" data-k="hs"><span><b>Full headshot</b><br><small>Red Dot aggressive</small></span><span class="box"></span></button>
+<button class="toggle" type="button" data-k="st"><span><b>Aim stable</b><br><small>No overshoot</small></span><span class="box"></span></button>
+<button class="go" id="go" type="button">Generate config</button>
+<p class="note">Yeh hack nahi hai — sirf recommended numbers.</p>
+</section><section class="card" id="out"><div class="empty"><div><b>Config yahin aayegi</b><p>Generate dabao.</p></div></div></section></div>
+</main><script>
+const st={platform:"android",fps:false,hs:false,st:false};
+document.getElementById("dpi").oninput=e=>document.getElementById("dpiv").textContent=e.target.value;
+function setPlat(p){st.platform=p;document.getElementById("and").classList.toggle("on",p==="android");document.getElementById("ios").classList.toggle("on",p==="ios");}
+document.getElementById("and").onclick=()=>setPlat("android");
+document.getElementById("ios").onclick=()=>setPlat("ios");
+document.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>{st[b.dataset.k]=!st[b.dataset.k];b.classList.toggle("on",st[b.dataset.k]);});
+function clamp(n,a,b){return Math.max(a,Math.min(b,Math.round(n)));}
+function bias(model){let h=0;const s=model.trim().toLowerCase();if(!s)return 0;for(let i=0;i<s.length;i++)h=(h*33+s.charCodeAt(i))>>>0;return (h%9)-4;}
+function gen(){
+ const model=document.getElementById("model").value, ram=+document.getElementById("ram").value, storage=+document.getElementById("storage").value, dpi=+document.getElementById("dpi").value;
+ const b=bias(model), eff=st.platform==="ios"?dpi*0.9:dpi, dpiShift=(eff-411)*0.22;
+ const ramBoost=ram<=3?-14:ram<=4?-5:ram>=8?7:0, storageNudge=storage<=32?-4:storage>=256?2:0;
+ const general=clamp(150-dpiShift+ramBoost+storageNudge+(st.fps?-9:0)+(st.hs?4:0)-(st.st?7:0)+(st.platform==="ios"?5:0)+b,55,200);
+ const red=clamp(general-8+(st.hs?16:0)-(st.st?3:0),40,200);
+ const x2=clamp(red-14-(st.st?5:0),25,180);
+ const x4=clamp(x2*0.58-(st.st?6:0)+(st.hs?2:0),8,110);
+ const awm=clamp(x4*0.82+(st.hs?5:0)-(st.st?2:0),6,90);
+ const look=clamp(96-dpiShift*0.28+(st.fps?-5:2)+b*0.4,35,150);
+ let rec=ram<=3?352:ram<=4?392:ram>=8?432:411; if(st.fps)rec-=18; if(st.hs)rec+=10; if(st.st)rec-=14;
+ rec=st.platform==="ios"?clamp(rec*0.86,260,480):clamp(rec,280,520);
+ const graphics=ram<=4||st.fps?"Smooth":"Standard", style=ram<=4?"Low":st.fps?"Medium":"High", fps=st.fps&&ram>=6?"Extreme / 120":ram<=3?"High / 60":"Ultra / 90";
+ const rows=[["General",general],["Red Dot",red],["2x Scope",x2],["4x Scope",x4],["AWM Scope",awm],["Free Look",look]];
+ const text=["Ryze Sensi","Platform: "+st.platform,"RAM: "+ram+" GB","Recommended DPI: "+rec].concat(rows.map(r=>r[0]+": "+r[1])).join("\n");
+ document.getElementById("out").innerHTML='<div style="display:flex;justify-content:space-between;align-items:center"><b>Tumhari config</b><button class="copy" id="all">Copy all</button></div><div class="stats"><div class="stat"><div class="note">DPI</div><b>'+rec+'</b></div><div class="stat"><div class="note">Graphics</div><b>'+graphics+'</b></div><div class="stat"><div class="note">Style</div><b>'+style+'</b></div><div class="stat"><div class="note">FPS</div><b>'+fps+'</b></div></div><ul>'+rows.map(r=>'<li class="rowi"><span>'+r[0]+'</span><span class="num">'+r[1]+'</span></li>').join("")+'</ul>';
+ document.getElementById("all").onclick=()=>navigator.clipboard.writeText(text);
+}
+document.getElementById("go").onclick=gen;
+</script></body></html>
